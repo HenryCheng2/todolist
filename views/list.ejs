@@ -7,9 +7,13 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>weekday</h1>
+    <%if(kindOfDay =="Saturday" || kindOfDay == "Sunday"){%>
+        <h1 style="color:purple"><%= kindOfDay %> ToDo List</h1>
+    <%}else{%>
+        <h1 style="color:blue"><%= kindOfDay %> ToDo List</h1>
+    <% } %>
     <!-- <p>it is not the <%= kindOfDay %></p> -->
-    <p>today is <%= kindOfDay %></p>
+    <!-- <p><%= kindOfDay %> List</p> -->
     
 </body>
 </html>
