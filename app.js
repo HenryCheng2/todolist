@@ -3,46 +3,40 @@ const bodyParser = require("body-parser");
 //require
 const app = express();
 
+var items=[ "buy food","cook food","eat food"];
+
 app.set("view engine", "ejs");
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(express.static("public")); //allows the server to retreive static files in the public folder
 
 app.get("/", function (req, res) {
   var today = new Date();
-  var currentday = today.getDay();
-  var day="";
-  console.log("today is"+ currentday);
-  switch (currentday) {
-    case 0:
-      day = "Sunday";
-      break;
-    case 1:
-      day = "Monday";
-    case 2:
-      day = "Tuesday";
-      break;
-    case 3:
-      day = "Wednesday";
-      break;
-    case 4:
-      day = "Thursday";
-      break;
-    case 5:
-      day = "Friday";
-    case 6:
-      day = "Saturday";
-      break;
 
-    default:
-    console.log("error: current day is equal to: "+currentday);
+  var options = { 
+      weekday: 'long', 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+  };
+  
+  var day =today.toLocaleDateString("en-US", options); //convets varible today to a string for current date. 
+
+  res.render("list", { kindOfDay: day, newListItem:items });
+  // renders the list.ejs file as a webpage and passes the variable 'day' into the kindOfDay variable listed between the <%= EJS %> marker.
+});
+
+// handle post request from list.ejs
+app.post("/", function(req, res){
+  var item = req.body.newItem;
+  if(item == ""){
+    console.log("blank input");
+    res.redirect("/");
+    return 0;
 
   }
-  // if (currentday === 6 || currentday === 0) {
-  //   day = "weekend";
-  // } else {
-  //   day = "weekday";
-  // }
-  
-  res.render("list", { kindOfDay: day });
-  // renders the list.ejs file as a webpage and passes the variable 'day' into the kindOfDay variable listed between the <%= EJS %> marker.
+  items.push(item);
+  res.redirect("/");
+
 });
 
 app.listen(3000, function () {
